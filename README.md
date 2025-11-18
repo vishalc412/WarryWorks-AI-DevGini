@@ -1,4 +1,4 @@
-# Lovable-AI Builder Platform
+# AI Builder Platform
 
 **Transform your ideas into production-ready applications with AI-powered code generation.**
 
@@ -9,7 +9,7 @@
 
 ## 🚀 Overview
 
-Lovable-AI Builder Platform is an end-to-end AI-powered application engineering system that:
+AI Builder Platform is an end-to-end AI-powered application engineering system that:
 
 - **Captures Requirements** through an intelligent AI-driven interview process
 - **Generates Complete Specifications** (BRD, HLD, LLD)
