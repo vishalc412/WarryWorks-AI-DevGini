@@ -1,6 +1,7 @@
 """
 Lovable-AI Builder Platform - Main FastAPI Application
 """
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -8,6 +9,8 @@ import logging
 
 from app.core.config import settings
 from app.api import requirements, interview, generate, models as models_api
+from app.db.session import engine
+from app.db.base import Base
 
 # Configure logging
 logging.basicConfig(
@@ -16,13 +19,33 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events"""
+    # Startup
+    logger.info("Starting Lovable-AI Builder Platform...")
+    try:
+        # Create database tables if they don't exist
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables created/verified")
+    except Exception as e:
+        logger.error(f"Database initialization error: {e}")
+
+    yield
+
+    # Shutdown
+    logger.info("Shutting down Lovable-AI Builder Platform...")
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Lovable-AI Builder Platform",
     description="AI-powered application engineering system",
     version="1.0.0",
     docs_url="/api/docs",
-    redoc_url="/api/redoc"
+    redoc_url="/api/redoc",
+    lifespan=lifespan
 )
 
 # CORS Configuration
